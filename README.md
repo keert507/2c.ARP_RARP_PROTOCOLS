@@ -17,8 +17,8 @@ stored.
 5. Map the IP address with its MAC address and return the MAC address to client.
 P
 ## PROGRAM 
-CLIENT
 ~~~
+CLIENT-ARP
  import socket
  s=socket.socket()
  s.bind(('localhost',8000))
@@ -31,9 +31,23 @@ CLIENT
  c.send(address[ip].encode())
  except KeyError:
  c.send("Not Found".encode())
+
+CLIENT-RARP
+import socket 
+s=socket.socket() 
+s.bind(('localhost',9000)) 
+s.listen(5) 
+c,addr=s.accept() 
+address={"6A:08:AA:C2":"192.168.1.100","8A:BC:E3:FA":"192.168.1.99"}; 
+while True: 
+       ip=c.recv(1024).decode() 
+       try: 
+          c.send(address[ip].encode()) 
+       except KeyError: 
+          c.send("Not Found".encode())
 ~~~
- SERVER
 ~~~
+ SERVER-ARP
  import socket
  s=socket.socket()
  s.connect(('localhost',8000))
@@ -41,13 +55,29 @@ CLIENT
  ip=input("Enter logical Address : ")
  s.send(ip.encode())
  print("MAC Address",s.recv(1024).decode()
+
+SERVER-RARP
+import socket 
+s=socket.socket() 
+s.connect(('localhost',9000)) 
+while True: 
+ ip=input("Enter MAC Address : ") 
+ s.send(ip.encode()) 
+ print("Logical Address",s.recv(1024).decode())
 ~~~
 ## OUPUT 
-CLIENT
+CLIENT-ARP
 ![WhatsApp Image 2025-04-20 at 09 10 04_07b86a21](https://github.com/user-attachments/assets/69b6d5fa-9ae1-4a5a-8fb0-2031a0b9f12d)
 
-SERVER
+CLIENT-RARP
+![image](https://github.com/user-attachments/assets/a11051f5-5399-4a83-bd5f-1f62dd8a6e2c)
+
+
+SERVER-ARP
 ![WhatsApp Image 2025-04-20 at 09 10 14_fe378320](https://github.com/user-attachments/assets/0df276c5-80dd-46e6-9b69-a1cbac08373e)
+
+SERVER-RARP
+![Screenshot 2025-04-29 135332](https://github.com/user-attachments/assets/3dbf1c96-f68f-4fdb-9d75-4f9b513ae7cd)
 
 
 ## RESULT
